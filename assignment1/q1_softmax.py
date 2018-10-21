@@ -29,14 +29,19 @@ def softmax(x):
     orig_shape = x.shape
 
     if len(x.shape) > 1:
-        # Matrix
+        # Matrix 当输入不止一个向量，即需要进行批量计算
+        x_max = np.max(x,axis=1).reshape(x.shape[0],1)
+        x = x - x_max
+        x = np.exp(x)/np.sum(np.exp(x), axis=1).reshape(x.shape[0], 1)
         ### YOUR CODE HERE
-        raise NotImplementedError
+        #raise NotImplementedError
         ### END YOUR CODE
     else:
         # Vector
+        x = x-np.max(x)
+        x = np.exp(x)/np.sum(np.exp(x))
         ### YOUR CODE HERE
-        raise NotImplementedError
+        #raise NotImplementedError
         ### END YOUR CODE
 
     assert x.shape == orig_shape
@@ -84,4 +89,4 @@ def test_softmax():
 
 if __name__ == "__main__":
     test_softmax_basic()
-    test_softmax()
+    #test_softmax()
