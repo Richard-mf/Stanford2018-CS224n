@@ -41,14 +41,25 @@ def forward_backward_prop(X, labels, params, dimensions):
     # Note: compute cost based on `sum` not `mean`.
     ### YOUR CODE HERE: forward propagation
     #raise NotImplementedError
-    H1 = np.dot(W1 * X.T) + b1
-    H2 = np.dot(W2 * sigmoid(H1)) + b2
-    pre = softmax(H2.T)
+    z1 = np.dot(X, W1.T) + b1
+    a1 = sigmoid(z1)
+    z2 = np.dot(a1, W2.T) + b2
+    pre = softmax(z2)
     ### END YOUR CODE
 
     ### YOUR CODE HERE: backward propagation
     cost = -1 * np.sum(labels * np.log(pre))/X.shape[0]
-    gradW2 = np.sum(cost * H2)
+    
+    d3 = (pre - labels) / data.shape[0]
+    d2 = np.dot(d3, W2.T)
+
+    gradW2 = np.dot(d3, a1)
+    gradb2 = np.sum(d3,0,keepdims=True)
+
+    d1 = d2 * sigmoid_grad(z1)
+
+    gradW1 = np.dot(data.T, d1)
+    gradb1 = np.sum(d1,0)
 
     #raise NotImplementedError
     ### END YOUR CODE
